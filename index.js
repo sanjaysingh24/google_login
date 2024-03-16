@@ -8,6 +8,8 @@ import passport from 'passport';
 import 'dotenv/config';
 import passportgoogle from 'passport-google-oauth20';
 
+// initialize the Strategy
+
 const GoogleStrategy = passportgoogle.Strategy;
 //intialize the port and the express
 
@@ -45,28 +47,32 @@ async function main(){
 
 
 
-// create a schema on mongodb
+// create a schema on mongodb which store the google id or name in the database
 const userSchema = new mongoose.Schema({
     googleID:String,
     name:String
 },{timestamps:true})
 
 
-
+// here create a model
 const User = mongoose.model('User',userSchema);
 
 // for google login
 passport.use(new GoogleStrategy({
-    clientID:process.env.CLIENTID,
-    clientSecret:process.env.SECRET,
+    clientID:process.env.CLIENTID, // u can achive it from google console
+    clientSecret:process.env.SECRET, // same 
     callbackURL:"http://localhost:8000/auth/google/callback"
 },
 async function (accessTOken,refreshToken,profile,done){
     try{
-        const user = await User.findOne({googleId:profile.id});
+        const user = await User.findOne({googleId:profile.id}); //checking for the use id in database
+        
+        // if user is already store in database then  simply return the user  
         if(user){
             return done(null,user);
         }
+
+
         else{
             const newUSer = new User({
                 googleID:profile.id,
