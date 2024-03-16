@@ -61,7 +61,7 @@ const User = mongoose.model('User',userSchema);
 passport.use(new GoogleStrategy({
     clientID:process.env.CLIENTID, // u can achive it from google console
     clientSecret:process.env.SECRET, // same 
-    callbackURL:"https://google-login-0m4z.onrender.com/auth/google/callback"
+    callbackURL:"https://google-login-e6zs.onrender.com/auth/google/callback"
 },
 async function (accessTOken,refreshToken,profile,done){
     try{
